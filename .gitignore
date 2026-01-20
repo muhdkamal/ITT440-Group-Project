@@ -1,0 +1,23 @@
+# Compiled C Binaries (Main Project)
+c_server
+c_client
+
+# Binaries inside specific folders
+server_c/c_server
+server_c_2/c_server
+client_c/c_client
+client_c_2/c_client
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Docker logs and temporary files
+*.log
+.DS_Store
+
+# Hidden folders
+.vscode/
+.idea/
