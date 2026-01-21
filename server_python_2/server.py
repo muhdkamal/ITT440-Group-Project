@@ -3,7 +3,6 @@ import mysql.connector
 import threading
 import time
 
-# Database Config
 db_config = {
     'host': 'mysql-db',
     'user': 'root',
@@ -11,9 +10,9 @@ db_config = {
     'database': 'socket_db'
 }
 
-# Task 1: Background loop for ONLY PyUser2
+
 def update_points():
-    # Only one specific user for this server
+    
     target_user = "PyUser2"
     
     while True:
@@ -21,8 +20,7 @@ def update_points():
             conn = mysql.connector.connect(**db_config)
             cursor = conn.cursor()
             
-            # Simplified query: No loop, targets only PyUser2
-            # Added datetime_stamp = NOW() to ensure the timestamp updates
+      
             cursor.execute("""
                 INSERT INTO scores (user, points) VALUES (%s, 1)
                 ON DUPLICATE KEY UPDATE points = points + 1, datetime_stamp = NOW()
@@ -35,10 +33,10 @@ def update_points():
             print(f"DB Error in background loop: {e}")
         time.sleep(30)
 
-# Start the background thread
+
 threading.Thread(target=update_points, daemon=True).start()
 
-# Task 2: Server Socket on Port 5003
+
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(('0.0.0.0', 5003)) 
 server.listen(5)
@@ -52,7 +50,7 @@ while True:
             conn = mysql.connector.connect(**db_config)
             cursor = conn.cursor()
             
-            # Strictly fetch ONLY PyUser2 data (Exact match)
+          
             cursor.execute("SELECT user, points, datetime_stamp FROM scores WHERE user = %s", ("PyUser2",))
             row = cursor.fetchone()
             

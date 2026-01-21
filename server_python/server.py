@@ -3,7 +3,6 @@ import mysql.connector
 import threading
 import time
 
-# Config to connect to the other container
 DB_CONFIG = {
     "host": "mysql-db",
     "user": "root",
@@ -11,9 +10,8 @@ DB_CONFIG = {
     "database": "socket_db"
 }
 
-# Task 1: Update points every 30 seconds for ONE specific user
+
 def update_loop():
-    # Only one specific user for this server
     target_user = 'PyUser1' 
     
     while True:
@@ -21,7 +19,7 @@ def update_loop():
             db = mysql.connector.connect(**DB_CONFIG)
             cursor = db.cursor()
             
-            # Simplified query: No loop, targets only PyUser1
+            
             query = f"INSERT INTO scores (user, points) VALUES ('{target_user}', 1) " \
                     f"ON DUPLICATE KEY UPDATE points = points + 1, datetime_stamp = NOW()"
             
@@ -33,10 +31,8 @@ def update_loop():
             print(f"DB Update Error: {e}")
         time.sleep(30)
 
-# Start background thread
 threading.Thread(target=update_loop, daemon=True).start()
 
-# Task 2: Socket Server (TCP)
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(('0.0.0.0', 5001))
 server.listen(5)
@@ -50,7 +46,7 @@ while True:
             db = mysql.connector.connect(**DB_CONFIG)
             cursor = db.cursor()
             
-            # Strictly fetch ONLY PyUser1 data
+          
             cursor.execute("SELECT user, points, datetime_stamp FROM scores WHERE user = 'PyUser1'")
             
             row = cursor.fetchone()

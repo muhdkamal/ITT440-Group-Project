@@ -1,6 +1,5 @@
 import socket
 
-# Targets the new container name and new port
 SERVER_HOST = 'py-server-2-container'
 SERVER_PORT = 5003
 

@@ -12,15 +12,15 @@
 #define DB_PASS "adminpass"
 #define DB_NAME "socket_db"
 
-// Thread to update points every 30 seconds for ONE specific user
+
 void* update_loop(void* arg) {
-    const char *target_user = "CUser1"; // Specific user for this server
+    const char *target_user = "CUser1"; 
 
     while(1) {
         MYSQL *conn = mysql_init(NULL);
         if (mysql_real_connect(conn, DB_HOST, DB_USER, DB_PASS, DB_NAME, 3306, NULL, 0)) {
             char query[256];
-            // Updated query to handle only the single user and refresh the timestamp
+            
             sprintf(query, "INSERT INTO scores (user, points) VALUES ('%s', 1) "
                            "ON DUPLICATE KEY UPDATE points = points + 1, datetime_stamp = NOW()", 
                            target_user);
@@ -42,7 +42,7 @@ int main() {
     pthread_create(&tid, NULL, update_loop, NULL);
 
     int server_fd = socket(AF_INET, SOCK_STREAM, 0);
-    // Standard port for C Server 1
+    
     struct sockaddr_in addr = { .sin_family = AF_INET, .sin_addr.s_addr = INADDR_ANY, .sin_port = htons(5002) };
     
     bind(server_fd, (struct sockaddr *)&addr, sizeof(addr));
@@ -58,7 +58,7 @@ int main() {
             MYSQL *conn = mysql_init(NULL);
             mysql_real_connect(conn, DB_HOST, DB_USER, DB_PASS, DB_NAME, 3306, NULL, 0);
             
-            // Strictly fetch ONLY CUser1 data
+            
             char select_query[256];
             sprintf(select_query, "SELECT user, points, datetime_stamp FROM scores WHERE user = 'CUser1'");
             

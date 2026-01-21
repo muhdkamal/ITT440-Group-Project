@@ -13,7 +13,7 @@
 #define DB_NAME "socket_db"
 #define PORT 5004
 
-// Thread to update points every 30 seconds for CUser2 ONLY
+
 void* update_loop(void* arg) {
     const char *target_user = "CUser2"; 
 
@@ -21,7 +21,7 @@ void* update_loop(void* arg) {
         MYSQL *conn = mysql_init(NULL);
         if (mysql_real_connect(conn, DB_HOST, DB_USER, DB_PASS, DB_NAME, 3306, NULL, 0)) {
             char query[256];
-            // Updated to handle only CUser2 and refresh timestamp
+           
             sprintf(query, "INSERT INTO scores (user, points) VALUES ('%s', 1) "
                            "ON DUPLICATE KEY UPDATE points = points + 1, datetime_stamp = NOW()", 
                            target_user);
@@ -58,7 +58,7 @@ int main() {
             MYSQL *conn = mysql_init(NULL);
             mysql_real_connect(conn, DB_HOST, DB_USER, DB_PASS, DB_NAME, 3306, NULL, 0);
             
-            // Strictly fetch ONLY CUser2 data
+            
             char select_query[256];
             sprintf(select_query, "SELECT user, points, datetime_stamp FROM scores WHERE user = 'CUser2'");
             
